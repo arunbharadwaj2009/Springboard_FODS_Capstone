@@ -1,86 +1,25 @@
-Version: 1.0
-
-RestoreWorkspace: Default
-SaveWorkspace: Default
-AlwaysSaveHistory: Default
-
-EnableCodeIndexing: Yes
-UseSpacesForTab: Yes
-NumSpacesForTab: 2
-Encoding: UTF-8
-
-RnwWeave: Sweave
-LaTeX: pdfLaTeX
-R version 3.3.2 (2016-10-31) -- "Sincere Pumpkin Patch"
-Copyright (C) 2016 The R Foundation for Statistical Computing
-Platform: x86_64-w64-mingw32/x64 (64-bit)
-
-R is free software and comes with ABSOLUTELY NO WARRANTY.
-You are welcome to redistribute it under certain conditions.
-Type 'license()' or 'licence()' for distribution details.
-
-R is a collaborative project with many contributors.
-Type 'contributors()' for more information and
-'citation()' on how to cite R or R packages in publications.
-
-Type 'demo()' for some demos, 'help()' for on-line help, or
-'help.start()' for an HTML browser interface to help.
-Type 'q()' to quit R.
-
+# dplyr and tidyr packages
 > library(dplyr)
-
-Attaching package: ‘dplyr’
-
-The following objects are masked from ‘package:stats’:
-
-    filter, lag
-
-The following objects are masked from ‘package:base’:
-
-    intersect, setdiff, setequal, union
-
-Warning message:
-package ‘dplyr’ was built under R version 3.3.3 
 > library(tidyr)
-Warning message:
-package ‘tidyr’ was built under R version 3.3.3 
+
+# Read CSV file 
 > refine_original <- read.csv("refine_original.csv")
-Error in file(file, "rt") : cannot open the connection
-In addition: Warning message:
-In file(file, "rt") :
-  cannot open file 'refine_original.csv': No such file or directory
-> library(readr)
-> refine_original <- read_csv("C:/Arun/Springboard/FODS/Data Wrangling Exercise 1/refine_original.csv")
-Parsed with column specification:
-cols(
-  `<U+FEFF>company` = col_character(),
-  `Product code / number` = col_character(),
-  address = col_character(),
-  city = col_character(),
-  country = col_character(),
-  name = col_character()
-)
-> View(refine_original)
-> refine_original$company
-NULL
-Warning message:
-Unknown or uninitialised column: 'company'. 
-> refine_original <- read.csv("refine_original.csv")
-Error in file(file, "rt") : cannot open the connection
-In addition: Warning message:
-In file(file, "rt") :
-  cannot open file 'refine_original.csv': No such file or directory
-> setwd("C:/Arun/Springboard/FODS/Data Wrangling Exercise 1")
-> refine_original <- read.csv("refine_original.csv")
+
+# Convert company column to lowercase
 > refine_original$ï..company <- tolower(refine_original$ï..company)
-> refine_original <- sub(pattern="ak*.",replacement = "akzo")
-Error in sub(pattern = "ak*.", replacement = "akzo") : 
-  argument "x" is missing, with no default
-> refine_original <- sub(pattern="ak*.",replacement = "akzo",refine_original$ï..company)
-> refine_original <- read.csv("refine_original.csv")
-> refine_original$ï..company <- sub(pattern="ak*.",replacement = "akzo",refine_original$ï..company)
-> refine_original$ï..company <- tolower(refine_original$ï..company)
+
+# Convert all characters containing 'ak' and 'ph' to 'akzo' and 'philips' 
 > refine_original$ï..company <- sub(pattern="ak.*",replacement = "akzo",refine_original$ï..company)
 > refine_original$ï..company <- sub(pattern="ph.*",replacement = "philips",refine_original$ï..company)
-> refine_original$ï..company <- sub(pattern="vak.*",replacement = "akzo",refine_original$ï..company)
-> refine_original$ï..company <- sub(pattern="fil.*",replacement = "philips",refine_original$ï..company)
+
+# Separate product code column to 'product_code' and 'product_number'
+> refine_original <- separate(refine_original,col=Product.code...number,into=c("product_code","product_number"),sep="-")
+
+# Create 'product_category' column to exactly replicate 'product_code'
+> refine_original$product_category <- refine_original$product_code
+
+# In product_category column change "p", "v", "x" and "q" to "Smartphone", "TV", "Laptop" and "Tablet
+> refine_original$product_category <- sub(pattern="p",replacement = "Smartphone",refine_original$product_category)
+> refine_original$product_category <- sub(pattern="v",replacement = "TV",refine_original$product_category)
+> refine_original$product_category <- sub(pattern="x",replacement = "Laptop",refine_original$product_category)
+> refine_original$product_category <- sub(pattern="q",replacement = "Tablet",refine_original$product_category)
