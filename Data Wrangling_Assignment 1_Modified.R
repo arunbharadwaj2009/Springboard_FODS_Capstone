@@ -20,10 +20,12 @@ refine_original <- separate(refine_original,col=Product.code...number,into=c("pr
 refine_original$product_category <- refine_original$product_code
 
 # In product_category column change "p", "v", "x" and "q" to "Smartphone", "TV", "Laptop" and "Tablet
-> refine_original$product_category <- sub(pattern="p",replacement = "Smartphone",refine_original$product_category)
-> refine_original$product_category <- sub(pattern="v",replacement = "TV",refine_original$product_category)
-> refine_original$product_category <- sub(pattern="x",replacement = "Laptop",refine_original$product_category)
-> refine_original$product_category <- sub(pattern="q",replacement = "Tablet",refine_original$product_category)
+Sub_product_category_func <- function(x,y){sub(pattern = x,replacement=y,refine_original$product_category)}
+
+refine_original$product_category <- Sub_product_category_func("p","Smartphone")
+refine_original$product_category <- Sub_product_category_func("v","TV")
+refine_original$product_category <- Sub_product_category_func("x","Laptop")
+refine_original$product_category <- Sub_product_category_func("q","Tablet")
 
 # Add column named full_address where address, city and country are pasted together using comma as separator
 > refine_original <- mutate(refine_original,
