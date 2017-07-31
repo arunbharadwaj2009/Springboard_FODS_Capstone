@@ -39,9 +39,9 @@ Summarise_pclass_OWTPAC <- titanic3 %>% group_by(ï..pclass) %>% summarise(b = m
 
 # Grouping dataset based on pclass and finding means shows that pclass = 1 have mean of 39.15, pclass =2 have mean 29.5 and pclass = 3 have mean 24.8
 
-#countNA_pclass <- titanic3  %>% group_by(ï..pclass) %>% summarise((c=sum(is.na(titanic3$age)))) 
+countNA_pclass <- titanic3  %>% group_by(ï..pclass) %>% summarise((c=sum(is.na(age)))) 
 
-#countNA_pclass
+countNA_pclass
 
 # Since the original dataset is already grouped by pclass, we try to find the number of NA`s in age column for each pclass (1,2,3)
 
