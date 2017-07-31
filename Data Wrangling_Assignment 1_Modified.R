@@ -1,0 +1,68 @@
+# dplyr and tidyr packages
+library(dplyr)
+library(tidyr)
+
+# Read CSV file 
+refine_original <- read.csv("refine_original.csv",fileEncoding="UTF-8-BOM")
+
+# Convert company column to lowercase
+refine_original$company <- tolower(refine_original$company)
+
+# Convert all characters containing 'ak' and 'ph' to 'akzo' and 'philips' 
+refine_original$company <- sub(pattern="ak.*",replacement = "akzo",refine_original$company)
+refine_original$company <- sub(pattern="ph.*",replacement = "philips",refine_original$company)
+refine_original$company <- sub(pattern="un.*",replacement = "unilever",refine_original$company)
+
+# Separate product code column to 'product_code' and 'product_number'
+refine_original <- separate(refine_original,col=Product.code...number,into=c("product_code","product_number"),sep="-")
+
+# Create 'product_category' column to exactly replicate 'product_code'
+refine_original$product_category <- refine_original$product_code
+
+# In product_category column change "p", "v", "x" and "q" to "Smartphone", "TV", "Laptop" and "Tablet
+> refine_original$product_category <- sub(pattern="p",replacement = "Smartphone",refine_original$product_category)
+> refine_original$product_category <- sub(pattern="v",replacement = "TV",refine_original$product_category)
+> refine_original$product_category <- sub(pattern="x",replacement = "Laptop",refine_original$product_category)
+> refine_original$product_category <- sub(pattern="q",replacement = "Tablet",refine_original$product_category)
+
+# Add column named full_address where address, city and country are pasted together using comma as separator
+> refine_original <- mutate(refine_original,
+                            full_address = paste(refine_original$address,refine_original$city,refine_original$country,sep=","))
+
+# Create new columns for company dummy variable
+> refine_original$company_philips <- refine_original$ï..company
+> refine_original$company_akzo <- refine_original$ï..company
+> refine_original$company_van_houten <- refine_original$ï..company
+> refine_original$company_unilever <- refine_original$ï..company
+
+# For loop that compares company column and company name. If they match, 1 is assigned to dummy variable column
+> for(i in 1:length(refine_original$company_philips)){if(refine_original$ï..company[i] == "philips"){refine_original$company_philips[i] = 1} 
+  else{refine_original$company_philips[i] = 0}}
+> for(i in 1:length(refine_original$company_akzo)){if(refine_original$ï..company[i] == "akzo"){refine_original$company_akzo[i] = 1} 
+  else{refine_original$company_akzo[i] = 0}}
+> for(i in 1:length(refine_original$company_van_houten)){if(refine_original$ï..company[i] == "van houten"){refine_original$company_van_houten[i] = 1} 
+  else{refine_original$company_van_houten[i] = 0}}
+> for(i in 1:length(refine_original$company_unilever)){if(refine_original$ï..company[i] == "unilever"){refine_original$company_unilever[i] = 1} 
+  else{refine_original$company_unilever[i] = 0}}
+
+# Create new columns for product dummy variables   
+> refine_original$product_smartphone <- refine_original$product_category
+> refine_original$product_tv <- refine_original$product_category
+> refine_original$product_laptop <- refine_original$product_category
+> refine_original$product_tablet <- refine_original$product_category
+
+# For loop that compares product category and product name. If they match, 1 is assigned to dummy variable column  
+> for(i in 1:length(refine_original$product_smartphone)){if(refine_original$product_category[i] == "Smartphone")
+{refine_original$product_smartphone[i] = 1} else{refine_original$product_smartphone[i] = 0}}   
+> for(i in 1:length(refine_original$product_tv)){if(refine_original$product_category[i] == "TV")
+{refine_original$product_tv[i] = 1} else{refine_original$product_tv[i] = 0}}
+> for(i in 1:length(refine_original$product_laptop)){if(refine_original$product_category[i] == "Laptop")
+{refine_original$product_laptop[i] = 1} else{refine_original$product_laptop[i] = 0}}
+> for(i in 1:length(refine_original$product_tablet)){if(refine_original$product_category[i] == "Tablet")
+{refine_original$product_tablet[i] = 1} else{refine_original$product_tablet[i] = 0}}
+
+# Save new file called refine_clean      
+> refine_clean <- refine_original
+
+# Write final csv output file to working directory 
+> write.csv(refine_clean,file="refine_clean.csv") 
