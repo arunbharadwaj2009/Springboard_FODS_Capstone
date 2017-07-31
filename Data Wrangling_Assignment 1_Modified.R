@@ -19,7 +19,7 @@ refine_original <- separate(refine_original,col=Product.code...number,into=c("pr
 # Create 'product_category' column to exactly replicate 'product_code'
 refine_original$product_category <- refine_original$product_code
 
-# In product_category column change "p", "v", "x" and "q" to "Smartphone", "TV", "Laptop" and "Tablet
+# In product_category column change "p", "v", "x" and "q" to "Smartphone", "TV", "Laptop" and "Tablet using a function()
 Sub_product_category_func <- function(x,y){sub(pattern = x,replacement=y,refine_original$product_category)}
 
 refine_original$product_category <- Sub_product_category_func("p","Smartphone")
@@ -28,43 +28,23 @@ refine_original$product_category <- Sub_product_category_func("x","Laptop")
 refine_original$product_category <- Sub_product_category_func("q","Tablet")
 
 # Add column named full_address where address, city and country are pasted together using comma as separator
-> refine_original <- mutate(refine_original,
-                            full_address = paste(refine_original$address,refine_original$city,refine_original$country,sep=","))
+refine_original <- refine_original %>% 
+                    mutate(full_address = paste(refine_original$address,refine_original$city,refine_original$country,sep=","))
 
-# Create new columns for company dummy variable
-> refine_original$company_philips <- refine_original$ï..company
-> refine_original$company_akzo <- refine_original$ï..company
-> refine_original$company_van_houten <- refine_original$ï..company
-> refine_original$company_unilever <- refine_original$ï..company
+# Create new columns for company dummy variable using mutate. For values that have the respective company names, substitute 1. For other values, substitute 0
+refine_original <- refine_original %>% mutate(company_philips = ifelse(company=="philips",1,0))
+refine_original <- refine_original %>% mutate(company_akzo = ifelse(company=="akzo",1,0))
+refine_original <- refine_original %>% mutate(company_van_houten = ifelse(company=="van houten",1,0))
+refine_original <- refine_original %>% mutate(company_unilever = ifelse(company=="unilever",1,0))
 
-# For loop that compares company column and company name. If they match, 1 is assigned to dummy variable column
-> for(i in 1:length(refine_original$company_philips)){if(refine_original$ï..company[i] == "philips"){refine_original$company_philips[i] = 1} 
-  else{refine_original$company_philips[i] = 0}}
-> for(i in 1:length(refine_original$company_akzo)){if(refine_original$ï..company[i] == "akzo"){refine_original$company_akzo[i] = 1} 
-  else{refine_original$company_akzo[i] = 0}}
-> for(i in 1:length(refine_original$company_van_houten)){if(refine_original$ï..company[i] == "van houten"){refine_original$company_van_houten[i] = 1} 
-  else{refine_original$company_van_houten[i] = 0}}
-> for(i in 1:length(refine_original$company_unilever)){if(refine_original$ï..company[i] == "unilever"){refine_original$company_unilever[i] = 1} 
-  else{refine_original$company_unilever[i] = 0}}
-
-# Create new columns for product dummy variables   
-> refine_original$product_smartphone <- refine_original$product_category
-> refine_original$product_tv <- refine_original$product_category
-> refine_original$product_laptop <- refine_original$product_category
-> refine_original$product_tablet <- refine_original$product_category
-
-# For loop that compares product category and product name. If they match, 1 is assigned to dummy variable column  
-> for(i in 1:length(refine_original$product_smartphone)){if(refine_original$product_category[i] == "Smartphone")
-{refine_original$product_smartphone[i] = 1} else{refine_original$product_smartphone[i] = 0}}   
-> for(i in 1:length(refine_original$product_tv)){if(refine_original$product_category[i] == "TV")
-{refine_original$product_tv[i] = 1} else{refine_original$product_tv[i] = 0}}
-> for(i in 1:length(refine_original$product_laptop)){if(refine_original$product_category[i] == "Laptop")
-{refine_original$product_laptop[i] = 1} else{refine_original$product_laptop[i] = 0}}
-> for(i in 1:length(refine_original$product_tablet)){if(refine_original$product_category[i] == "Tablet")
-{refine_original$product_tablet[i] = 1} else{refine_original$product_tablet[i] = 0}}
+# Create new columns for product dummy variable using mutate. For values that have the respective product names, substitute 1. For other values, substitute 0
+refine_original <- refine_original %>% mutate(product_smartphone = ifelse(product_category=="Smartphone",1,0))
+refine_original <- refine_original %>% mutate(product_tv = ifelse(product_category=="TV",1,0))
+refine_original <- refine_original %>% mutate(product_laptop = ifelse(product_category=="Laptop",1,0))
+refine_original <- refine_original %>% mutate(product_tablet = ifelse(product_category=="Tablet",1,0))
 
 # Save new file called refine_clean      
-> refine_clean <- refine_original
+refine_clean <- refine_original
 
 # Write final csv output file to working directory 
-> write.csv(refine_clean,file="refine_clean.csv") 
+write.csv(refine_clean,file="refine_clean.csv") 
