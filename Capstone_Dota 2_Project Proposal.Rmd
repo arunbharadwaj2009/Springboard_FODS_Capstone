@@ -1,0 +1,30 @@
+---
+title: "Capstone Project Proposal_Dota 2"
+author: "Arun Bharadwaj"
+date: "August 1, 2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Project Proposal
+
+The goal of the capstone project is to use all the topics learnt in the Springboard Foundations in Data Science course and develop a final report that can be used by Valve Corporation to explore and improve the gameplay dynamics of DOTA (defense of the ancients).
+
+## Why does Valve Corporation care about this project
+
+Dota is one of Valve Corporation`s best selling games. Given that the game has over 100 heroes, mutiplayer funcionality and many million hours of gameplay, Valve would always like to have a new perspective of Dota 2. While some previous Springboard students have used this topic for their capstone, my goal is to explore new aspects of this topic using the same dataset.
+
+## What can Valve Corporation do using the results of this project
+
+Dota 2`s multiplayer functionality, team gameplay dynamics and 100+ heroes makes it an interesting platform to analyze gamer behavior. By understanding gamer behavior, Valve Corporation can build better games and improved versions of Dota. 
+
+## Dota 2 dataset
+
+The dataset to be used for the capstone project is taken from Kaggle. Posted by Devin, the dataset has a total of 18 csv files. The dataset contains information about 50000 matches, taken from Opendota. Some noteworthy data includes time to first blood for different players, game duration, tower and barrack health at end of the game, chat messages,gold information, player performance, in-game purchases etc. Most of the data wrangling and data cleaning needed for the dataset relates to NA and negative values. Many columns have a large percentage of observations as NA`s. Some columns have negative value observations, which are incorrect. 
+
+## Approach to problem solving
+
+
