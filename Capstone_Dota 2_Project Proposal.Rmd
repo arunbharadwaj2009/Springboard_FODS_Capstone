@@ -27,4 +27,6 @@ The dataset to be used for the capstone project is taken from Kaggle. Posted by 
 
 ## Approach to problem solving
 
+Most important aspect of the project is to identify the problem statement. While there is a lot of relevant information about players, matches and heroes, finding the problem statement that can fit into the course timeline and incorporate all topics taught in the course is most important. Data wrangling and cleaning is the next important step. While most of the Dota 2 data is in a usable format, there are many instances of NA`s and incorrect negative values. Converting incorrect negative values to zero and removing columns with very high percentage of NA observations is a critical step in data wrangling. Exploratory data analysis, inferential statistics and some machine learning are some of the other steps needed to complete the project.
+
 
