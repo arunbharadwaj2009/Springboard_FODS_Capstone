@@ -36,23 +36,48 @@ none_players_stuns <- which(players_csv$stuns == "None")
 players_csv$stuns[none_players_stuns] <- 0 
 
 # Write function to compute percentage of NA`s in different columns of any dataset
-function_total_NA <- function(x,y){x %>% summarise(total = sum(is.na(y)))}
+function_total_NA <- function(x,y){x %>% summarise_at(sum(is.na(y))/nrow(y))}
+
+function_NA <- function(x){sum(is.na(x))}
+
+players_csv %>% summarise_at(c("unit_order_stop","unit_order_radar"),function_NA) 
 
 #function_total_NA <- function(x,y){x %>% summarise(total = sum(is.na(y))/nrow(y))}
-#mapply(players_csv,c(players_csv$gold_destroying_structure,players_csv$gold_killing_creeps),function_total_NA)
 
-function_total_NA(players_csv,players_csv$gold_killing_roshan)  
+#mapply(c(players_csv$xp_other,players_csv$xp_roshan),function_total_NA)
 
+function_total_NA(players_csv,players_csv$xp_other) # 21036 
+function_total_NA(players_csv,players_csv$xp_roshan) # 320438 
+function_total_NA(players_csv,players_csv$gold_abandon) # 479366
+function_total_NA(players_csv,players_csv$gold_killing_couriers) # 240264
+function_total_NA(players_csv,players_csv$gold_killing_roshan) # 240264
+function_total_NA(players_csv,players_csv$gold_buyback) # 352859
+function_total_NA(players_csv,players_csv$unit_order_cast_toggle) # 401211
+function_total_NA(players_csv,players_csv$unit_order_drop_item) # 288667
+function_total_NA(players_csv,players_csv$unit_order_give_item) # 394631
+function_total_NA(players_csv,players_csv$unit_order_disassemble_item) # 485446
+function_total_NA(players_csv,players_csv$unit_order_cast_toggle) # 401211
+function_total_NA(players_csv,players_csv$unit_order_stop) # 412425
+function_total_NA(players_csv,players_csv$unit_order_taunt) # 500000
+function_total_NA(players_csv,players_csv$unit_order_buyback) # 352233
+function_total_NA(players_csv,players_csv$unit_order_glyph) # 273230
+function_total_NA(players_csv,players_csv$unit_order_eject_item_from_stash) # 468736
+function_total_NA(players_csv,players_csv$unit_order_cast_rune) # 499991
+function_total_NA(players_csv,players_csv$unit_order_move_to_direction) # 496449
+function_total_NA(players_csv,players_csv$unit_order_patrol) # 500000
+function_total_NA(players_csv,players_csv$unit_order_vector_target_position) # 500000
+function_total_NA(players_csv,players_csv$unit_order_radar) # 500000
+function_total_NA(players_csv,players_csv$unit_order_set_item_combine_lock) # 500000
+function_total_NA(players_csv,players_csv$unit_order_continue) # 500000
 
-# Check observations in players_csv where gold_abandon is NA
-goldabandon_NA <- (is.na(players_csv$gold_abandon)) # 479366 observations in gold_abandon are 0
+players_csv %>% select_if(is.na())
 
 # Remove gold_abandon column in players_csv since a large percentage of its values are NA
-players_csv$gold_abandon <- NULL 
+#players_csv$gold_abandon <- NULL 
 
 # Perform something similar for gold_killing_couriers column in players_csv
-goldkillingcouriers_NA <- (is.na(players_csv$gold_killing_couriers))
-players_csv$gold_killing_couriers <- NULL
+#goldkillingcouriers_NA <- (is.na(players_csv$gold_killing_couriers))
+#players_csv$gold_killing_couriers <- NULL
 
-unit_order_none_NA <- (is.na(players_csv$unit_order_none))
-players_csv$unit_order_none <- NULL
+#unit_order_none_NA <- (is.na(players_csv$unit_order_none))
+#players_csv$unit_order_none <- NULL
