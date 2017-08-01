@@ -30,3 +30,29 @@ chat_csv$time[chat_negative] <- 0
 # Do something similar for the time column of purchase_log_csv table
 purchase_log_negative <- (purchase_log_csv$time<0)
 purchase_log_csv$time[purchase_log_negative] <- 0
+
+# In players_csv, convert all 'None' observations in stuns column to 0
+none_players_stuns <- which(players_csv$stuns == "None")
+players_csv$stuns[none_players_stuns] <- 0 
+
+# Write function to compute percentage of NA`s in different columns of any dataset
+function_total_NA <- function(x,y){x %>% summarise(total = sum(is.na(y)))}
+
+#function_total_NA <- function(x,y){x %>% summarise(total = sum(is.na(y))/nrow(y))}
+#mapply(players_csv,c(players_csv$gold_destroying_structure,players_csv$gold_killing_creeps),function_total_NA)
+
+function_total_NA(players_csv,players_csv$gold_killing_roshan)  
+
+
+# Check observations in players_csv where gold_abandon is NA
+goldabandon_NA <- (is.na(players_csv$gold_abandon)) # 479366 observations in gold_abandon are 0
+
+# Remove gold_abandon column in players_csv since a large percentage of its values are NA
+players_csv$gold_abandon <- NULL 
+
+# Perform something similar for gold_killing_couriers column in players_csv
+goldkillingcouriers_NA <- (is.na(players_csv$gold_killing_couriers))
+players_csv$gold_killing_couriers <- NULL
+
+unit_order_none_NA <- (is.na(players_csv$unit_order_none))
+players_csv$unit_order_none <- NULL
