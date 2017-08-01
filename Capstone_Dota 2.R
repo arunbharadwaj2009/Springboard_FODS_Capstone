@@ -19,4 +19,14 @@ mean(match_csv$first_blood_time)
 sum(match_csv$first_blood_time < 100) # 29437 observations in first_blood_time were below 100 seconds. This indicates some error in the way first blood is calculated.
 
 # In match_csv, cluster region is given as number. This is the only csv file that includes cluster. Instead of using numbers, join cluster_regions with match_csv
+match_csv1 <- left_join(match_csv,cluster_regions_csv,by = "cluster")
 
+# In chat_csv, some time values are negative. Check how many are negative
+chat_negative <- (chat_csv$time < 0) # 77905 values are negative
+
+# Convert all negative time values in chat table to 0 since most of the negative values lie at game start
+chat_csv$time[chat_negative] <- 0
+
+# Do something similar for the time column of purchase_log_csv table
+purchase_log_negative <- (purchase_log_csv$time<0)
+purchase_log_csv$time[purchase_log_negative] <- 0
