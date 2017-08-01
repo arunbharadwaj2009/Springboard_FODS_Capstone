@@ -12,7 +12,7 @@ knitr::opts_chunk$set(echo = TRUE)
 # Summary of most important steps in capstone data wrangling
 
 ## Introduction
-The capstone project is the Dota 2 dataset from Kaggle. It contains 18 csv files about 50000 games. Player information, match information, time to first blood, total gold gained and lost, match duration are examples of significant data points. 
+The capstone project is the Dota 2 dataset from Kaggle. It contains 18 csv files with information about 50000 games. Player information, match information, time to first blood, total gold gained and lost, match duration are examples of significant data points. 
 
 ## Identify most useful csv files
 First part of the data wrangling process was to view different csv files and identify the files that have the most useful information. 2 files, match_csv and player_csv, were identified to be having the most useful information. 
@@ -21,7 +21,7 @@ First part of the data wrangling process was to view different csv files and ide
 Some hist functions were run on game_mode, negative_votes and positive_votes columns of match_csv file. Results from these hist functions showed that all 3 variables have only 1 respective value. Since the 3 variables do not have different values, they are of no significance to our analysis.
 
 ## Check if data points of some important variables make sense 
-In match_csv, the mean of first__blood_time returned a value of 93. Having played Dota, it is obvious that 93 minutes is too long for the mean of first blood time. A cursory internet search shows that in a sample tournament, first blood time was 3 minutes. It is safe to assume that the unit of first_blood_time is seconds. Close to 25000 observations have a first blood time less than 100 seconds. This seems improbable since on average, a player takes atleast 1.5 minutes to buy some inventory and head to the map. 
+In match_csv, the mean of first__blood_time returned a value of 93. Having played Dota, it is obvious that 93 minutes is too long for the mean of first blood time. A cursory internet search shows that in a sample tournament, first blood time was 3 minutes. It is safe to assume that the unit of first_blood_time is seconds. Close to 25000 observations have a first blood time less than 100 seconds. This seems improbable since on average, a player takes atleast 1.5 minutes to buy some inventory and head to center of the map. 
 
 ## Check if some small csv files can be combined with larger csv files to make it easier to visualize data
 In match_csv, a variable called cluster is shown in numeric. This variable shows the geographical region where the match is taking place. A cluster_csv file uses a key value pair, where key is numeric cluster variable and value is name of geographical region. Left_join is used to merge the match_csv and cluster_csv files to help with data visualization.
