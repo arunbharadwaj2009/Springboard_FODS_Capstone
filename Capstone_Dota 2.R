@@ -19,7 +19,7 @@ mean(match_csv$first_blood_time)
 sum(match_csv$first_blood_time < 100) # 29437 observations in first_blood_time were below 100 seconds. This indicates some error in the way first blood is calculated.
 
 # In match_csv, cluster region is given as number. This is the only csv file that includes cluster. Instead of using numbers, join cluster_regions with match_csv
-match_csv1 <- left_join(match_csv,cluster_regions_csv,by = "cluster")
+match_csv <- left_join(match_csv,cluster_regions_csv,by = "cluster")
 
 # In chat_csv, some time values are negative. Check how many are negative
 chat_negative <- (chat_csv$time < 0) # 77905 values are negative
@@ -35,49 +35,24 @@ purchase_log_csv$time[purchase_log_negative] <- 0
 none_players_stuns <- which(players_csv$stuns == "None")
 players_csv$stuns[none_players_stuns] <- 0 
 
-# Write function to compute percentage of NA`s in different columns of any dataset
-function_total_NA <- function(x,y){x %>% summarise_at(sum(is.na(y))/nrow(y))}
+# Write function to compute sum of NA`s in different columns of a dataset (Only choose columns that we believe have many NA`s)
 
-function_NA <- function(x){sum(is.na(x))}
+players_csv %>% summarise_at(c("xp_other","xp_roshan","gold_killing_roshan","gold_buyback","unit_order_cast_toggle","unit_order_drop_item","unit_order_give_item","unit_order_disassemble_item", "unit_order_cast_toggle", "unit_order_stop", "unit_order_taunt", "unit_order_buyback", "unit_order_glyph", "unit_order_eject_item_from_stash", "unit_order_cast_rune", "unit_order_move_to_direction", "unit_order_patrol", "unit_order_vector_target_position", "unit_order_radar","unit_order_stop", "unit_order_set_item_combine_lock", "unit_order_continue"),function_NA) 
 
-players_csv %>% summarise_at(c("unit_order_stop","unit_order_radar"),function_NA) 
+# High NA columns are all columns chosen in above function other than xp_other
 
-#function_total_NA <- function(x,y){x %>% summarise(total = sum(is.na(y))/nrow(y))}
+High_NA_Columns <- c("xp_roshan","gold_killing_roshan","gold_buyback","unit_order_cast_toggle","unit_order_cast_toggle_auto","unit_order_drop_item","unit_order_give_item","unit_order_disassemble_item", "unit_order_cast_toggle", "unit_order_stop", "unit_order_taunt", "unit_order_buyback", "unit_order_glyph", "unit_order_eject_item_from_stash", "unit_order_cast_rune", "unit_order_move_to_direction", "unit_order_patrol", "unit_order_vector_target_position", "unit_order_radar","unit_order_stop", "unit_order_set_item_combine_lock", "unit_order_continue")
 
-#mapply(c(players_csv$xp_other,players_csv$xp_roshan),function_total_NA)
+# Nullify all high NA columns so that the dataset is easier to work with
 
-function_total_NA(players_csv,players_csv$xp_other) # 21036 
-function_total_NA(players_csv,players_csv$xp_roshan) # 320438 
-function_total_NA(players_csv,players_csv$gold_abandon) # 479366
-function_total_NA(players_csv,players_csv$gold_killing_couriers) # 240264
-function_total_NA(players_csv,players_csv$gold_killing_roshan) # 240264
-function_total_NA(players_csv,players_csv$gold_buyback) # 352859
-function_total_NA(players_csv,players_csv$unit_order_cast_toggle) # 401211
-function_total_NA(players_csv,players_csv$unit_order_drop_item) # 288667
-function_total_NA(players_csv,players_csv$unit_order_give_item) # 394631
-function_total_NA(players_csv,players_csv$unit_order_disassemble_item) # 485446
-function_total_NA(players_csv,players_csv$unit_order_cast_toggle) # 401211
-function_total_NA(players_csv,players_csv$unit_order_stop) # 412425
-function_total_NA(players_csv,players_csv$unit_order_taunt) # 500000
-function_total_NA(players_csv,players_csv$unit_order_buyback) # 352233
-function_total_NA(players_csv,players_csv$unit_order_glyph) # 273230
-function_total_NA(players_csv,players_csv$unit_order_eject_item_from_stash) # 468736
-function_total_NA(players_csv,players_csv$unit_order_cast_rune) # 499991
-function_total_NA(players_csv,players_csv$unit_order_move_to_direction) # 496449
-function_total_NA(players_csv,players_csv$unit_order_patrol) # 500000
-function_total_NA(players_csv,players_csv$unit_order_vector_target_position) # 500000
-function_total_NA(players_csv,players_csv$unit_order_radar) # 500000
-function_total_NA(players_csv,players_csv$unit_order_set_item_combine_lock) # 500000
-function_total_NA(players_csv,players_csv$unit_order_continue) # 500000
+players_csv<-subset(players_csv,,-c(xp_roshan,gold_killing_roshan,gold_buyback,unit_order_cast_toggle,unit_order_cast_toggle_auto,unit_order_drop_item,unit_order_give_item,unit_order_disassemble_item, unit_order_cast_toggle, unit_order_stop, unit_order_taunt, unit_order_buyback, unit_order_glyph, unit_order_eject_item_from_stash, unit_order_cast_rune, unit_order_move_to_direction, unit_order_patrol, unit_order_vector_target_position, unit_order_radar,unit_order_stop, unit_order_set_item_combine_lock, unit_order_continue))
 
-players_csv %>% select_if(is.na())
+# Nullify Key column in objectives_csv due to high percentage of NA`s
 
-# Remove gold_abandon column in players_csv since a large percentage of its values are NA
-#players_csv$gold_abandon <- NULL 
+objectives_csv <- subset(objectives_csv,,-key)
 
-# Perform something similar for gold_killing_couriers column in players_csv
-#goldkillingcouriers_NA <- (is.na(players_csv$gold_killing_couriers))
-#players_csv$gold_killing_couriers <- NULL
+# Convert all negative account id`s in player_ratings_csv to 0
 
-#unit_order_none_NA <- (is.na(players_csv$unit_order_none))
-#players_csv$unit_order_none <- NULL
+negative_account_id <- which(player_ratings_csv$account_id < 0)
+
+player_ratings_csv$account_id[negative_account_id] <- 0
