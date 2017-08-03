@@ -29,5 +29,9 @@ In match_csv, a variable called cluster is shown in numeric. This variable shows
 ## Convert incorrect negative values to 0
 In multiple columns, there are negative value observations. For instance, some time and account id columns have negative values. This is incorrect and must be modified. Such incorrect negative values are made equal to 0.
 
+### Why not convert incorrect negative values to NA
+Majority of incorrect negative values are seen in multiple time columns and account id column. In the chat_csv file`s time column, which is arranged in ascending of time per match id, the negative values are very low single digit numbers. It is likely that  these actions occurred at the very beginning of the game. Instead of counting them as 0 time, the data was incorrectly recorded as low negative values. So, for the sake of simplicity, all negative time values are converted to 0. In account id, we know that players can choose to not reveal their id and are counted as anonymous. These anonymous players are  counted as 0 in the account id. Again, for the sake of simplicity, negative account id are also considered as anonymous and converted to 0 value. 
+
+
 ## Nullify columns with very high percentage of NA values
 For the sake of simplicity, columns with very high percentage of NA values are nullified. These columns are considered to be not significant for the purpose of our analysis. This is done using the summarise_at() function of dplyr.
