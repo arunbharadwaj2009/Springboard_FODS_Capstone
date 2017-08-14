@@ -98,17 +98,9 @@ players_csv3$item_id <- NULL
 
 ### Exploratory Data Analysis and Data Visualization using ggplot2
 
-# Explore how much damage is sustained by different types of heroes
-
-ggplot(na.omit(players_csv),aes(x=Class,y=hero_damage,col=Class)) + geom_point(alpha=0.6) + labs(x="Type of Hero",y="Damage Sustained")
-
-# Explore how much healing is done by different types of heroes (heroes can heal themselves and also heal others)
-
-ggplot(na.omit(players_csv),aes(x=Class,y=hero_healing,col=Class)) + geom_point(alpha=0.6) + labs(x="Type of Hero",y="Damage Healed")
-
 # Calculate total stats by hero type
 
-Stats_by_hero_type <- na.omit(players_csv) %>% group_by(Class) %>% summarise(Total_Kills = sum(kills),Total_Deaths = sum(deaths),Total_Assists = sum(assists),Total_Tower_Damage = sum(tower_damage),Total_Gold_Spent = sum(gold_spent,na.rm=TRUE),Last_Hits = sum(last_hits),Total_Stuns=sum(stuns),Mean_XP_Per_Min=mean(xp_per_min),Mean_Gold_Per_Min=mean(gold_per_min),Runes_Picked=sum(unit_order_pickup_rune,na.rm=TRUE))
+Stats_by_hero_type <- na.omit(players_csv) %>% group_by(Class) %>% summarise(Total_Damage = sum(hero_damage),Total_Healing = sum(hero_healing),Total_Kills = sum(kills),Total_Deaths = sum(deaths),Total_Assists = sum(assists),Total_Tower_Damage = sum(tower_damage),Total_Gold_Spent = sum(gold_spent,na.rm=TRUE),Last_Hits = sum(last_hits),Total_Stuns=sum(stuns),Mean_XP_Per_Min=mean(xp_per_min),Mean_Gold_Per_Min=mean(gold_per_min),Runes_Picked=sum(unit_order_pickup_rune,na.rm=TRUE))
 
 # Scale all observations so that sum of columns equals 1. This helps normalize values
 
@@ -136,7 +128,7 @@ players_ratings_csv2 <- players_ratings_csv2 %>% mutate(percentage_wins=total_wi
 
 # Histogram line plot of percentage_wins statistic by player account_id. Most players win half of the games they play.
 
-ggplot(players_ratings_csv2,aes(percentage_wins)) +geom_density()
+ggplot(players_ratings_csv2,aes(percentage_wins)) +geom_histogram(aes(y=..density..)) + geom_density(aes(y=..density..))
 
 # Scatter plot of trueskill_mu and percentage_wins in players_ratings_csv2. trueskill_sigma is assigned to color attribute. Both trueskill attributes are calculated by Dota fans and not by Valve corporation. While trueskill_mu is indicator of player`s ability, with higher value implying better player, trueskill_sigma is the uncertainty in the trueskill_mu measure. As expected, skill and win percentage are correlated. 
 
@@ -145,3 +137,5 @@ ggplot(players_ratings_csv2,aes(x=trueskill_mu,y=percentage_wins,col=trueskill_s
 # Scatter plot of radiant_win and game duration shows that radiant or dire winning is unaffected by game duration (radiant and dire are the names of 2 dota teams)
 
 ggplot(match_csv,aes(x=radiant_win,y=duration)) +geom_point() + geom_jitter(shape=1)
+
+
